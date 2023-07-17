@@ -1,2 +1,2 @@
 # MoveSemantics
-Just tried to understand the move semantics.
+Just tried to understand what is the move semantics.
