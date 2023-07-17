@@ -28,6 +28,20 @@ public:
 		other.m_Size = 0;
 		other.m_Data = nullptr; // reconfigurate the pointer of old object
 	}
+	// Assignment operator
+	String& operator=(String&& other) noexcept
+	{
+		printf("Moved!\n");
+		if (this != &other)
+		{
+			delete[] m_Data;
+			m_Size = other.m_Size;
+			m_Data = other.m_Data;
+			other.m_Size = 0;
+			other.m_Data = nullptr; // reconfigurate the pointer of old object
+		}
+		return *this;
+	}
 	~String()
 	{
 		printf("Destroyed!\n");
@@ -53,8 +67,8 @@ public:
 
 	}
 	Entity(String&& name) // for rvalue
-		//: m_Name((String&&)name)
-		: m_Name(std::move(name))  // the same as above
+	  //: m_Name((String&&)name)
+		: m_Name(std::move(name))  // transform to rvalue
 	{
 
 	}
@@ -69,6 +83,32 @@ private:
 int main()
 {
 	//Entity entity(String("Message"));
-	Entity entity("Message"); // Message is a temporary object, it's not assigned to anything (rvalue)
-	entity.PrintName();
+	//Entity entity("Message"); // Message is a temporary object, it's not assigned to anything (rvalue)
+	//entity.PrintName();
+
+	String apple = "Apple";
+	String dest;
+	//String dest = std::move(apple); // move constructor
+
+	std::cout << "Apple: ";
+	apple.Print();
+	std::cout << "Dest: ";
+	dest.Print();
+
+	dest = std::move(apple);         // assignment operator
+	                                 // std::move(...) convert an object (lvalue) to temporary object (rvalue)
+
+	std::cout << "Apple: ";
+	apple.Print();
+	std::cout << "Dest: ";
+	dest.Print();
+
+	//String string = "Hello";
+	//String dest = (String&&)string;
+	//String dest((String&&)string);
+	//String dest(std::move(string)); // moving this string into this destination
+	//String dest = std::move(string);
+
+	//dest = std::move(string);
+	//dest = std::move(dest);
 }
